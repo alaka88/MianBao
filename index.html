@@ -2,63 +2,99 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>缅報期数</title>
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EYPPWFPD6B"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-EYPPWFPD6B');
-  </script>
-
+  <title>《緬報》期数</title>
   <style>
     body {
       font-family: sans-serif;
       text-align: center;
-      padding: 50px;
-      background-color: #f4f4f4;
+      padding: 40px;
+      background-color: #444;
     }
     h1 {
       margin-bottom: 30px;
+      color: #fff;         
     }
-    ul {
-      list-style: none;
-      padding: 0;
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
     }
-    li {
-      margin: 15px 0;
+    .issue-card {
+      width: 200px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 10px;
+      transition: transform 0.2s;
     }
-    a {
-      text-decoration: none;
-      color: #2c3e50;
-      font-size: 1.2em;
+    .issue-card:hover {
+      transform: translateY(-5px);
     }
-    a:hover {
-      color: #007acc;
+    .issue-card img {
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .issue-card h3 {
+      margin: 10px 0 5px 0;
+      font-size: 1.1em;
+      font-weight: normal;     
+      color: #333;
+    }
+    .issue-card p {
+      margin: 0;
+      font-size: 0.9em;
+      color: #555;
     }
   </style>
 </head>
 <body>
 
-  <h1>《缅報》期数</h1>
+  <h1>《緬報》期数</h1>
+  <div class="grid" id="issues-grid"></div>
 
-  <ul>
-    <li><a href="issue1.html">第一期《2025年7月11日》</a></li>
-    <li><a href="issue2.html">第二期《2025年7月18日》</a></li>
-    <li><a href="issue3.html">第三期《2025年7月25日》</a></li>
-    <li><a href="issue4.html">第四期《2025年8月1日》</a></li>
-    <li><a href="issue5.html">第五期《2025年8月8日》</a></li>
-    <li><a href="issue6.html">第六期《2025年8月15日》</a></li>
-    <li><a href="issue7.html">第七期《2025年8月22日》</a></li>
-    <li><a href="issue8.html">第八期《2025年8月29日》</a></li>
-    <li><a href="issue9.html">第九期《2025年9月13日》</a></li>
-    <li><a href="issue10.html">第十期《2025年10月10日》</a></li>
-    <li><a href="issue11.html">第十一期《2025年10月17日》</a></li>
-    <li><a href="issue12.html">第十二期：敬请期待</a></li>
-  </ul>
+  <script>
+    const issues = [
+      { id: 1, date: "2025年7月11日", img: "第一期.png" },
+      { id: 2, date: "2025年7月18日", img: "第二期.png" },
+      { id: 3, date: "2025年7月25日", img: "第三期.png" },
+      { id: 4, date: "2025年8月1日", img: "第四期.png" },
+      { id: 5, date: "2025年8月8日", img: "第五期.png" },
+      { id: 6, date: "2025年8月15日", img: "第六期.png" },
+      { id: 7, date: "2025年8月22日", img: "第七期.png" },
+      { id: 8, date: "2025年8月29日", img: "第八期.png" },
+      { id: 9, date: "2025年9月13日", img: "第九期.png" },
+      { id: 10, date: "2025年10月10日", img: "第十期.png" },
+      { id: 11, date: "2025年10月17日", img: "第十一期.png" },
+      { id: 12, date: "敬请期待", img: "" }
+    ];
+
+    const grid = document.getElementById("issues-grid");
+
+    issues.forEach(issue => {
+      const card = document.createElement("div");
+      card.className = "issue-card";
+
+      if(issue.img) {
+        const img = document.createElement("img");
+        img.src = `images/${issue.img}`;
+        img.alt = `缅報第${issue.id}期`;
+        img.onclick = () => window.open(img.src, "_blank"); 
+        card.appendChild(img);
+      }
+
+      const h3 = document.createElement("h3");
+      h3.textContent = `第${issue.id}期`;
+      card.appendChild(h3);
+
+      const p = document.createElement("p");
+      p.textContent = issue.date;
+      card.appendChild(p);
+
+      grid.appendChild(card);
+    });
+  </script>
 
   <div style="
     position: fixed;
