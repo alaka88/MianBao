@@ -4,15 +4,45 @@
   <meta charset="UTF-8">
   <title>《緬報》期数</title>
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      padding: 40px;
-      background-color: #444;
-    }
+  html, body {
+  height: 100%;      
+  margin: 0;         
+}
+
+body {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 40px;
+  background: url('images/neonflames.png') center/cover no-repeat fixed;;
+  background-size: cover;      
+  background-position: center;
+  background-repeat: no-repeat;
+}
     h1 {
       margin-bottom: 30px;
       color: #fff;         
+    }
+    /* 小流星效果 */
+    .shooting-star {
+      position: absolute;
+      width: 3px;
+      height: 60px;
+      background: linear-gradient(45deg, rgba(255,255,255,1), rgba(255,255,255,0));
+      opacity: 0;
+      pointer-events: none;
+      transform: rotate(45deg);
+      border-radius: 50%;
+    }
+
+    @keyframes shoot {
+      0% {
+        opacity: 1;
+        transform: translate(var(--start-x), var(--start-y)) rotate(45deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(var(--end-x), var(--end-y)) rotate(45deg);
+      }
     }
     .grid {
       display: flex;
@@ -35,6 +65,8 @@
       width: 100%;
       border-radius: 6px;
       cursor: pointer;
+      border: 2px solid #f0f0f0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
     .issue-card h3 {
       margin: 10px 0 5px 0;
@@ -67,7 +99,8 @@
       { id: 9, date: "2025年9月13日", img: "第九期.png" },
       { id: 10, date: "2025年10月10日", img: "第十期.png" },
       { id: 11, date: "2025年10月17日", img: "第十一期.png" },
-      { id: 12, date: "敬请期待", img: "" }
+      { id: 12, date: "2025年10月31日", img: "第十二期.png" },
+      { id: 13, date: "敬请期待", img: "" }
     ];
 
     const grid = document.getElementById("issues-grid");
@@ -101,7 +134,7 @@
     bottom: 10px;
     right: 10px;
     font-size: 0.85em;
-    color: #fff;
+    color: #333;
     z-index: 9999;
     text-align: right;
     line-height: 1.4;
