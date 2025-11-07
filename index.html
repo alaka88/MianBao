@@ -22,28 +22,14 @@ body {
       margin-bottom: 30px;
       color: #fff;         
     }
-    /* 小流星效果 */
-    .shooting-star {
-      position: absolute;
-      width: 3px;
-      height: 60px;
-      background: linear-gradient(45deg, rgba(255,255,255,1), rgba(255,255,255,0));
-      opacity: 0;
-      pointer-events: none;
-      transform: rotate(45deg);
-      border-radius: 50%;
-    }
-
-    @keyframes shoot {
-      0% {
-        opacity: 1;
-        transform: translate(var(--start-x), var(--start-y)) rotate(45deg);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(var(--end-x), var(--end-y)) rotate(45deg);
-      }
-    }
+   
+  #canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: 1;
+  }
     .grid {
       display: flex;
       flex-wrap: wrap;
@@ -83,6 +69,7 @@ body {
 </head>
 <body>
 
+  <canvas id="canvas"></canvas>
   <h1>《緬報》期数</h1>
   <div class="grid" id="issues-grid"></div>
 
@@ -100,7 +87,8 @@ body {
       { id: 10, date: "2025年10月10日", img: "第十期.png" },
       { id: 11, date: "2025年10月17日", img: "第十一期.png" },
       { id: 12, date: "2025年10月31日", img: "第十二期.png" },
-      { id: 13, date: "敬请期待", img: "" }
+      { id: 13, date: "2025年11月7日", img: "第十三期.png" },
+      { id: 14, date: "敬请期待", img: "" }
     ];
 
     const grid = document.getElementById("issues-grid");
@@ -127,7 +115,101 @@ body {
 
       grid.appendChild(card);
     });
+    const can = document.getElementById('canvas');
+    const cxt = can.getContext('2d');
+    let w = can.width = window.innerWidth;
+    let h = can.height = window.innerHeight; 
+
+    let num = 100; 
+    let data = []; 
+    let k = -1;
+    let range = Math.atan(k);
+    let length = 200;
+    let liuXY = [];
+
+    for (let i = 0; i < num; i++) {
+      data[i] = {x: Math.random() * w, y: Math.random() * h, r: Math.random() * 4 + 2};
+      drawCircle(data[i].x, data[i].y, data[i].r);
+    }
+
+    function drawCircle(x, y, r){
+      const rad = cxt.createRadialGradient(x,y,0,x,y,r);
+      rad.addColorStop(0,'rgba(255,255,255,0.8)');
+      rad.addColorStop(0.1,'rgba(255,255,255,0.8)');
+      rad.addColorStop(0.2,'rgba(255,255,255,0.08)');
+      rad.addColorStop(1,'rgba(255,255,255,0)');
+      cxt.fillStyle = rad;
+      cxt.beginPath();
+      cxt.arc(x,y,r,0,2*Math.PI);
+      cxt.fill();
+    }
+
+    function getY(x , startY , startX){
+      return k*x + startY - k*startX;
+    }
+
+    function drawMeteor(x, sX, sY){
+      const y = getY(x,sY,sX);
+      const r = 15;
+      const rad = cxt.createRadialGradient(x,y,0,x,y,r);
+      rad.addColorStop(0,'rgba(255,255,255,0.8)');
+      rad.addColorStop(0.1,'rgba(255,255,255,0.8)');
+      rad.addColorStop(0.2,'rgba(255,255,255,0.08)');
+      rad.addColorStop(1,'rgba(255,255,255,0)');
+      cxt.fillStyle = rad;
+      cxt.beginPath();
+      cxt.arc(x,y,r,0,2*Math.PI);
+      cxt.fill();
+
+      const wX = x + (Math.cos(range) * length);
+      const wY = y + (Math.sin(range) * length);
+      const rad2 = cxt.createRadialGradient(x,y,0,x,y,length);
+      rad2.addColorStop(0,'rgba(255,255,255,0.1)');
+      rad2.addColorStop(1,'rgba(255,255,255,0)');
+      cxt.fillStyle = rad2;
+      cxt.beginPath();
+      cxt.moveTo(x+3, y);
+      cxt.lineTo(x, y-3);
+      cxt.lineTo(wX, wY);
+      cxt.closePath();
+      cxt.fill();
+    }
+
+    function draw(){
+      cxt.clearRect(0,0,w,h);
+      for (let i=0; i<num; i++) {
+        data[i].r += Math.random()*2-1;
+        data[i].r = Math.max(0, Math.min(12, data[i].r));
+        drawCircle(data[i].x, data[i].y, data[i].r);
+      }
+
+      if (liuXY.length){
+        for (let i in liuXY){
+          liuXY[i].cX -= 10;
+          drawMeteor(liuXY[i].cX, liuXY[i].y, liuXY[i].x);
+          if (liuXY[i].cX < 0 || getY(liuXY[i].cX, liuXY[i].y , liuXY[i].x) > h){
+            liuXY.splice(i,1);
+          }
+        }
+      }
+
+      if (Math.random() > 0.985){
+        let a = Math.random() * (w - 300) + 200;
+        liuXY.push({x:a, y:0, cX:a});
+      }
+
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    window.addEventListener('resize', () => {
+      w = can.width = window.innerWidth;
+      h = can.height = 200;
+    });
   </script>
+  </script>
+
+
 
   <div style="
     position: fixed;
